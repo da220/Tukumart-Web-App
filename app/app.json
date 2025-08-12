@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "SOCAA",
+    "slug": "socaa",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "scheme": "socaa",
+    "platforms": ["ios", "android", "web"],
+    "ios": { "supportsTablet": true },
+    "android": {
+      "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#ffffff" },
+      "permissions": [],
+      "package": "com.example.socaa",
+      "intentFilters": []
+    },
+    "web": { "bundler": "metro" },
+    "extra": { "eas": { "projectId": "local" } }
+  }
+}
