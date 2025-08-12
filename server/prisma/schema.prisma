@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// datasource and generator are created by `prisma init`
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  OFFICER
+  FARMER
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         Role      @default(FARMER)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  officer      Officer?
+  advisories   Advisory[] @relation("UserAdvisories")
+  notifications Notification[]
+}
+
+model Officer {
+  id            Int     @id @default(autoincrement())
+  userId        Int     @unique
+  specialization String
+  region        String
+  bio           String?
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Crop {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+  advisories  Advisory[]
+  marketRates MarketRate[]
+}
+
+model Advisory {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  authorId  Int
+  cropId    Int?
+
+  author User @relation("UserAdvisories", fields: [authorId], references: [id])
+  crop   Crop? @relation(fields: [cropId], references: [id])
+}
+
+model MarketRate {
+  id         Int      @id @default(autoincrement())
+  cropId     Int
+  location   String
+  pricePerKg Float
+  date       DateTime @default(now())
+
+  crop Crop @relation(fields: [cropId], references: [id])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  title     String
+  body      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
+}
